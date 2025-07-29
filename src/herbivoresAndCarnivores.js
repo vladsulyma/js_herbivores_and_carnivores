@@ -1,4 +1,5 @@
 'use strict';
+
 class Animal {
   static alive = [];
 
@@ -8,14 +9,8 @@ class Animal {
     Animal.alive.push(this);
   }
 
-  static removeIfDead(animal) {
-    if (animal.health < 1) {
-      const index = Animal.alive.indexOf(animal);
-
-      if (index !== -1) {
-        Animal.alive.splice(index, 1);
-      }
-    }
+  static removeDead() {
+    Animal.alive = Animal.alive.filter(animal => animal.health > 0);
   }
 }
 
@@ -37,9 +32,9 @@ class Carnivore extends Animal {
   }
 
   bite(prey) {
-    if (prey.hidden === false && typeof prey.hide === 'function') {
+    if (prey instanceof Herbivore && !prey.hidden) {
       prey.health -= 50;
-      Animal.removeIfDead(prey);
+      Animal.removeDead();
     }
   }
 }
